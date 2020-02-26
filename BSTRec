@@ -1,3 +1,4 @@
+//defining the BST
 public class BST
 {
   class Node {
@@ -12,31 +13,39 @@ public class BST
     }
   }
 
+  //I just keep comparing to the current node. if smaller go left if larger go right until you reach null
   public Node insertRec(Node root, int num){
+    //base case
     if(root == null){
       root = new Node(num);
       return root;
     }
     else{
+      //checks if smaller for left subtree
       if(num < root.key){
         root.left = insertRec(root.left, num);
       }
+      //checks if larger for right subtree
       else if(num > root.key){
         root.right = insertRec(root.right, num);
       }
     }
     return root;
   }
+  //looks for the node to delete
   public Node deleteRec(Node root, int num){
+  //base case
     if(root == null){
       return root;
     }
+    //traverses thgough tree to find node
     if(num < root.key){
       root.left = deleteRec(root.left, num);
     }
     else if(num > root.key){
       root.right = deleteRec(root.right, num);
     }
+    //finds the value to delete and now looks to see what should replace it
     else if(root.key == num){
       if(root.left == null){
         return root.right;
@@ -50,24 +59,29 @@ public class BST
     
     return root;
   }
+  //just does comparisons on every node to see what is the closest node that is above the key
   public int findNextRec(Node root, int num){
     return findNextRecHelper(root, num, root.key);
   }
+  //helper that does all the work
   public int findNextRecHelper(Node root, int num, int next){
     if(root == null){
       return next;
     }
+    //sees if the rootkey is larger than the initial key but smaller than the current next
     if(root.key > num && root.key < next){
       int temp = next;
       findNextRecHelper(root.left, num, temp);
       findNextRecHelper(root.right, num, temp);
     }
+    //if new node wasnt better just continue with your old next
     else{
       findNextRecHelper(root.left, num, next);
       findNextRecHelper(root.right, num, next);
     }
     return next;
   }
+  //looks thrugh all the nodes to find prev
   public int findPrevRec(Node root, int num){
     return findNextRecHelper(root, num, root.key);
   }
@@ -75,20 +89,24 @@ public class BST
     if(root == null){
       return prev;
     }
+    //checks if node is smaller than the initial but larger than the last thought prev
     if(root.key < num && root.key > prev){
       int temp = prev;
       findNextRecHelper(root.left, num, temp);
       findNextRecHelper(root.right, num, temp);
     }
+    //if new key isnt better prev continue with old
     else{
       findNextRecHelper(root.left, num, prev);
       findNextRecHelper(root.right, num, prev);
     }
     return prev;
   }
+  //just go left as far as you can go and return
   public int findMinRec(Node root){
     return findMinRecHelper(root, root.key);
   }
+  //used helper to save the previous key if i hit a null
   public int findMinRecHelper(Node root, int prev){
     if(root == null){
       return prev;
@@ -96,9 +114,11 @@ public class BST
     return findMinRecHelper(root.left, root.key);
   }
 
+  //just go right as far as you can go and return
   public int findMaxRec(Node root){
     return findMinRecHelper(root, root.key);
   }
+  //used helper to save the previous key if i hit a null
   public int findMaxRecHelper(Node root, int prev){
     if(root == null){
       return prev;
