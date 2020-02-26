@@ -1,0 +1,153 @@
+public void insertIter(Node root, int num){
+    if(root == null){
+      root.key = num;
+      return;
+    }
+    Node temp = root;
+    while(true){
+      if(temp.left != null && num < temp.key){
+        temp = temp.left;
+        continue;
+      }
+      else if(temp.right != null && num > temp.key){
+        temp = temp.right;
+        continue;
+      }
+      else if(temp.left == null && num < temp.key){
+        Node nde = new Node(num);
+        temp.left = nde;
+        return;
+      }
+      else if(temp.right == null && num > temp.key){
+        Node nde = new Node(num);
+        temp.right = nde;
+        return;
+      }
+    }
+  }
+
+  public void deleteIter(Node root, int num){
+    if(root.key == num){
+      root = null;
+      return;
+    }
+    Node temp = root;
+    while(true){
+      if(temp.left != null && num < temp.key){
+        temp = temp.left;
+        continue;
+      }
+      else if(temp.right != null && num > temp.key){
+        temp = temp.right;
+        continue;
+      }
+      //if you are at the node to delete
+      else if(temp.key == num){
+        //if the right exists then you will go to the right one and then go as far left as you can
+        if(temp.right != null){
+          //set it to the right one
+          Node t = temp.right;
+          //go as far left as possible 
+          while(t.left != null){
+            t = t.left;
+          }
+          //assign the new value and clear 
+          temp.key = t.key;
+          t = null;
+          return;
+        }
+        //check if left is there
+        else if(temp.left != null){
+          //set node to one to the left
+          Node t = temp.left;
+          //go all the way right to find the largest in the subtree
+          while(t.right != null){
+            t = t.right;
+          }
+          //reassign and clear
+          temp.key = t.key;
+          t = null;
+          return;
+          }
+        }
+      }
+    }
+
+    //honestly not sure how I should do this iteratively so I'm just going to make a sorted array out of the 
+    public int findNextIter(Node root, int num){
+      Node temp = root;
+      //find the position of the node
+      while(temp != null){
+        if(num < temp.key){
+          temp = temp.left;
+        }
+        else if(num > temp.key){
+          temp = temp.right;
+        }
+        //found the node to find next
+        else{
+          //will go to the right one node and then as far left from that node to find the next
+          if(node.right != null){
+            temp = temp.right;
+            while(temp.left != null){
+              temp = temp.left;
+            }
+            return temp.key;
+          }
+          //else it will just return the parent
+          else{
+            return node.parent.key;
+          }
+        }
+      }
+    }
+
+    public int findPrevIter(Node root, int num){
+      Node temp = root;
+      //find the nodes position
+      while (temp != null){
+        if(num < temp.key){
+          temp = temp.left;
+        }
+        else if(num > temp.key){
+          temp = temp.right;
+        }
+        //found the node to find prev
+        else{
+          //if it has a left child it will go to that child and then go as far right from the child to find the prev
+          if(temp.left != null){
+            temp = temp.left;
+            while(temp.right != null){
+              temp = temp.right;
+            }
+            return temp.key
+          }
+          //checks if it's a right value then will return its parent
+          else if(isRight(temp)){
+            return parent(temp).key;
+          }
+          //checks if node is in the right subtree and a left node then will return root
+          else if(isLeft(temp) && num > root.key){
+            return root.key;
+          }
+        }
+      }
+    }
+
+  public int findMinIter(Node root){
+    Node temp = root;
+    //loop all the way left and then return that value
+    while(temp.left != null){
+      temp = temp.left;
+    }
+    return temp.key;
+  }
+
+  public int findMaxIter(Node root){
+    Node temp = root;
+    //loop all the way rigth and then return that value
+    while(temp.right != null){
+      temp = temp.right;
+    }
+    return temp.key;
+  }
