@@ -1,0 +1,7 @@
+public static int[] getSortedArray(int n){
+    int sortedArr[] = new int[n];
+    for(int i = 0; i < n; i++){
+      sortedArr[i] = n-i;
+    }
+    return sortedArr;
+  }
