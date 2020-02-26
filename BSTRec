@@ -1,0 +1,109 @@
+public class BST
+{
+  class Node {
+    int key;
+    Node left;
+    Node right;
+
+    public Node(int num){
+      key = num;
+      left = null;
+      right = null;
+    }
+  }
+
+  public Node insertRec(Node root, int num){
+    if(root == null){
+      root = new Node(num);
+      return root;
+    }
+    else{
+      if(num < root.key){
+        root.left = insertRec(root.left, num);
+      }
+      else if(num > root.key){
+        root.right = insertRec(root.right, num);
+      }
+    }
+    return root;
+  }
+  public Node deleteRec(Node root, int num){
+    if(root == null){
+      return root;
+    }
+    if(num < root.key){
+      root.left = deleteRec(root.left, num);
+    }
+    else if(num > root.key){
+      root.right = deleteRec(root.right, num);
+    }
+    else if(root.key == num){
+      if(root.left == null){
+        return root.right;
+      }
+      else if(root.right == null){
+        return root.left;
+      }
+      root.key = findMinRec(root.right);
+      root.right = deleteRec(root.right, root.key);
+    }
+    
+    return root;
+  }
+  public int findNextRec(Node root, int num){
+    return findNextRecHelper(root, num, root.key);
+  }
+  public int findNextRecHelper(Node root, int num, int next){
+    if(root == null){
+      return next;
+    }
+    if(root.key > num && root.key < next){
+      int temp = next;
+      findNextRecHelper(root.left, num, temp);
+      findNextRecHelper(root.right, num, temp);
+    }
+    else{
+      findNextRecHelper(root.left, num, next);
+      findNextRecHelper(root.right, num, next);
+    }
+    return next;
+  }
+  public int findPrevRec(Node root, int num){
+    return findNextRecHelper(root, num, root.key);
+  }
+  public int findPrevRecHelper(Node root, int num, int prev){
+    if(root == null){
+      return prev;
+    }
+    if(root.key < num && root.key > prev){
+      int temp = prev;
+      findNextRecHelper(root.left, num, temp);
+      findNextRecHelper(root.right, num, temp);
+    }
+    else{
+      findNextRecHelper(root.left, num, prev);
+      findNextRecHelper(root.right, num, prev);
+    }
+    return prev;
+  }
+  public int findMinRec(Node root){
+    return findMinRecHelper(root, root.key);
+  }
+  public int findMinRecHelper(Node root, int prev){
+    if(root == null){
+      return prev;
+    }
+    return findMinRecHelper(root.left, root.key);
+  }
+
+  public int findMaxRec(Node root){
+    return findMinRecHelper(root, root.key);
+  }
+  public int findMaxRecHelper(Node root, int prev){
+    if(root == null){
+      return prev;
+    }
+    return findMinRecHelper(root.right, root.key);
+  }
+
+}
