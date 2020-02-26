@@ -1,0 +1,15 @@
+  //takes in just an unsorted array
+  public int[] sort(int[] arr){
+    //declares emplty array the same length at the unsorted array
+    int[] sortedArr = [arr.length];
+    //inserts all the elements just in the order they were in the unsorted array
+    for(int i = 0; i < arr.length; i++){
+      insert(root, arr[i]);
+    }
+    //find the min value adds it to the sorted array and then deletes it from the BST
+    for(int i = 0; i < arr.length; i++){
+      int min = findMin(root);
+      sortedArr[i] = min;
+      delete(root, min);
+    }
+  }
