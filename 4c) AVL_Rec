@@ -1,0 +1,145 @@
+/*
+I think I heard you say that we can and should use the methods from our
+regular BST section so I hope it's okay that the findNext/Prev and Min/Max 
+seem kind of lazy
+*/
+public class AVL{
+
+class Node {
+  int key;
+  Node left;
+  Node right;
+  int height;
+
+  public Node(int num){
+    key = num;
+    left = null;
+    right = null;
+    height = 0;
+  }
+}
+
+public updateHeight(Node n){
+  if(height(n.left) > height(n.right)){
+    n.height = 1 + height(n.left);
+  }
+  else{
+    n.height = 1 + height(n.right);
+  }
+}
+//check the balance of a given node
+public int checkBal(Node n){
+  return (height(n.left) - height(n.right));
+}
+public void leftRotate(Node n){
+  //gets the node to the right of "root"
+  Node tempR = n.right;
+  //gets the node to left of tempR
+  Node tempRLeft = tempR.left;
+  //set original root to left of tempR
+  tempR.left = n;
+  //set right child of original root to the left child of the new root 
+  //since it is smaller
+  n.right = tempRLeft;
+  //get new heights for comparisons
+  updateHeight(n);
+  updateHeight(tempR);
+}
+public void rightRotate(Node n){
+  //node to left of "root"
+  Node tempL = n.left;
+  //node to right of tempL
+  Node tempLRight = tempL.right;
+  //set tempL as new root and assign original root as right of tempL
+  tempL.right = n;
+  //make tempLRight left child of original root
+  n.left = tempLRight;
+  //update heights
+  updateHeight(tempL);
+  updateHeight(n);
+}
+
+public Node insertRec(Node root, int num){
+  //first is just the normal insert for a BST
+  Node temp = BST.insertRec(root, num);
+  //then update height
+  updateHeight(temp);
+  //check balances
+  //left left check
+  if(checkBal(temp) > 1 && temp.key < temp.left.key){
+    rightRotate(temp);
+    return temp;
+  }
+  //left right check
+  if(checkBal(temp) > 1 && temp.key > temp.left.key){
+    Node lRot = temp.left;
+    leftRotate(lRot);
+    rightRotate(temp);
+    return temp;
+  }
+  //check for right right
+  if(checkBal(temp) < -1 && temp.key > temp.right.key){
+    leftRotate(temp);
+    return temp;
+  }
+  //check for right left
+  if(checkBal(temp) < -1 && temp.key < temp.right.key){
+    Node rRot = temp.right;
+    rightRotate(rRot);
+    leftRotate(temp);
+    return temp;
+  }
+  //if it's still balanced just return temp
+  return temp;
+  
+}
+public Node deleteRec(Node root, int num){
+  //first is just a normal delete
+  Node temp = BST.deleteRec(root, num);
+  //update height 
+  updateHeight(temp);
+  //check balance factors just like in insert
+  //left left check
+  if(checkBal(temp) > 1 && temp.key < temp.left.key){
+    rightRotate(temp);
+    return temp;
+  }
+  //left right check
+  if(checkBal(temp) > 1 && temp.key > temp.left.key){
+    Node lRot = temp.left;
+    leftRotate(lRot);
+    rightRotate(temp);
+    return temp;
+  }
+  //check for right right
+  if(checkBal(temp) < -1 && temp.key > temp.right.key){
+    leftRotate(temp);
+    return temp;
+  }
+  //check for right left
+  if(checkBal(temp) < -1 && temp.key < temp.right.key){
+    Node rRot = temp.right;
+    rightRotate(rRot);
+    leftRotate(temp);
+    return temp;
+  }
+  //if it's still balanced just return temp
+  return temp;
+}
+//will be the same as BST findNextRec
+public int findNextRec(Node root, int num){
+  return BST.findNextRec(root, num);
+}
+//will be the same as BST findPrevRec
+public int findPrevRec(Node root, int num){
+  return BST.findPrevRec(root, num);
+}
+//will be the same as findMinRec as any BST
+public int findMinRec(Node root){
+  return BST.findMinRec(root);
+}
+//will be the same as findMaxRec as any BST
+public int findMaxRec(Node root){
+  return BST.findMaxRec(root); 
+}
+}
