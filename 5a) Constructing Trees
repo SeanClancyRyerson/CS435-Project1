@@ -1,0 +1,12 @@
+class Main {
+  public static void main(String[] args) {
+    int[] arr = getRandomArray(10000);
+    //crashes due to stack overflow
+    for(int i = 0; i < arr.length; i++){
+      AVL.insertRec(arr[i]);
+    }
+    for(int i = 0; i < arr.length; i++){
+      BST.insertRec(arr[i]);
+    }
+  }
+}
