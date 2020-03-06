@@ -1,0 +1,343 @@
+//BST Class
+static int count = 0;
+public void insertIter(Node root, int num){
+    if(root == null){
+      root.key = num;
+      return;
+    }
+    Node temp = root;
+    while(true){
+      if(temp.left != null && num < temp.key){
+        temp = temp.left;
+        count++;
+        continue;
+      }
+      else if(temp.right != null && num > temp.key){
+        temp = temp.right;
+        count++;
+        continue;
+      }
+      else if(temp.left == null && num < temp.key){
+        Node nde = new Node(num);
+        temp.left = nde;
+        count++;
+        return;
+      }
+      else if(temp.right == null && num > temp.key){
+        Node nde = new Node(num);
+        temp.right = nde;
+        count++;
+        return;
+      }
+    }
+  }
+
+  public void deleteIter(Node root, int num){
+    if(root.key == num){
+      root = null;
+      return;
+    }
+    Node temp = root;
+    while(true){
+      if(temp.left != null && num < temp.key){
+        temp = temp.left;
+        count++;
+        continue;
+      }
+      else if(temp.right != null && num > temp.key){
+        temp = temp.right;
+        count++;
+        continue;
+      }
+      //if you are at the node to delete
+      else if(temp.key == num){
+        //if the right exists then you will go to the right one and then go as far left as you can
+        if(temp.right != null){
+          //set it to the right one
+          Node t = temp.right;
+          count++;
+          //go as far left as possible 
+          while(t.left != null){
+            t = t.left;
+            count++;
+          }
+          //assign the new value and clear 
+          temp.key = t.key;
+          t = null;
+          return;
+        }
+        //check if left is there
+        else if(temp.left != null){
+          //set node to one to the left
+          Node t = temp.left;
+          count++;
+          //go all the way right to find the largest in the subtree
+          while(t.right != null){
+            t = t.right;
+            count++;
+          }
+          //reassign and clear
+          temp.key = t.key;
+          t = null;
+          return;
+          }
+        }
+      }
+    }
+
+    //honestly not sure how I should do this iteratively so I'm just going to make a sorted array out of the 
+    public int findNextIter(Node root, int num){
+      Node temp = root;
+      //find the position of the node
+      while(temp != null){
+        if(num < temp.key){
+          temp = temp.left;
+          count++;
+        }
+        else if(num > temp.key){
+          temp = temp.right;
+          count++;
+        }
+        //found the node to find next
+        else{
+          //will go to the right one node and then as far left from that node to find the next
+          if(node.right != null){
+            temp = temp.right;
+            count++;
+            while(temp.left != null){
+              temp = temp.left;
+              count++;
+            }
+            return temp.key;
+          }
+          //else it will just return the parent
+          else{
+            return node.parent.key;
+          }
+        }
+      }
+    }
+
+    public int findPrevIter(Node root, int num){
+      Node temp = root;
+      //find the nodes position
+      while (temp != null){
+        if(num < temp.key){
+          temp = temp.left;
+          count++;
+        }
+        else if(num > temp.key){
+          temp = temp.right;
+          count++;
+        }
+        //found the node to find prev
+        else{
+          //if it has a left child it will go to that child and then go as far right from the child to find the prev
+          if(temp.left != null){
+            temp = temp.left;
+            count++;
+            while(temp.right != null){
+              temp = temp.right;
+              count++;
+            }
+            return temp.key
+          }
+          //checks if it's a right value then will return its parent
+          else if(isRight(temp)){
+            return parent(temp).key;
+          }
+          //checks if node is in the right subtree and a left node then will return root
+          else if(isLeft(temp) && num > root.key){
+            return root.key;
+          }
+        }
+      }
+    }
+
+  public int findMinIter(Node root){
+    Node temp = root;
+    //loop all the way left and then return that value
+    while(temp.left != null){
+      temp = temp.left;
+      count++;
+    }
+    return temp.key;
+  }
+
+  public int findMaxIter(Node root){
+    Node temp = root;
+    //loop all the way rigth and then return that value
+    while(temp.right != null){
+      temp = temp.right;
+      count++;
+    }
+    return temp.key;
+  }
+//AVL Class
+/*
+I think I heard you say that we can and should use the methods from our
+regular BST section so I hope it's okay that the findNext/Prev and Min/Max 
+seem kind of lazy
+*/
+static int count = 0;
+public class AVL{
+
+class Node {
+  int key;
+  Node left;
+  Node right;
+  int height;
+
+  public Node(int num){
+    key = num;
+    left = null;
+    right = null;
+    height = 0;
+  }
+}
+
+public updateHeight(Node n){
+  if(height(n.left) > height(n.right)){
+    n.height = 1 + height(n.left);
+    count+=3;
+  }
+  else{
+    n.height = 1 + height(n.right);
+    count+=3;
+  }
+}
+//check the balance of a given node
+public int checkBal(Node n){
+  count+=2;
+  return (height(n.left) - height(n.right));
+}
+public void leftRotate(Node n){
+  //gets the node to the right of "root"
+  Node tempR = n.right;
+  count++;
+  //gets the node to left of tempR
+  Node tempRLeft = tempR.left;
+  count++;
+  //set original root to left of tempR
+  tempR.left = n;
+  count++;
+  //set right child of original root to the left child of the new root 
+  //since it is smaller
+  n.right = tempRLeft;
+  count++;
+  //get new heights for comparisons
+  updateHeight(n);
+  updateHeight(tempR);
+}
+public void rightRotate(Node n){
+  //node to left of "root"
+  Node tempL = n.left;
+  count++;
+  //node to right of tempL
+  Node tempLRight = tempL.right;
+  count++;
+  //set tempL as new root and assign original root as right of tempL
+  tempL.right = n;
+  count++;
+  //make tempLRight left child of original root
+  n.left = tempLRight;
+  count++;
+  //update heights
+  updateHeight(tempL);
+  updateHeight(n);
+}
+
+public Node insertIter(Node root, int num){
+  //first is just the normal insert for a BST
+  Node temp = BST.insertIter(root, num);
+  //then update height
+  updateHeight(temp);
+  //check balances
+  //left left check
+  if(checkBal(temp) > 1 && temp.key < temp.left.key){
+    count++;
+    rightRotate(temp);
+    return temp;
+  }
+  //left right check
+  if(checkBal(temp) > 1 && temp.key > temp.left.key){
+    count++;
+    Node lRot = temp.left;
+    leftRotate(lRot);
+    rightRotate(temp);
+    return temp;
+  }
+  //check for right right
+  if(checkBal(temp) < -1 && temp.key > temp.right.key){
+    count++;
+    leftRotate(temp);
+    return temp;
+  }
+  //check for right left
+  if(checkBal(temp) < -1 && temp.key < temp.right.key){
+    count++;
+    Node rRot = temp.right;
+    rightRotate(rRot);
+    leftRotate(temp);
+    return temp;
+  }
+  //if it's still balanced just return temp
+  return temp;
+  
+}
+public Node deleteIter(Node root, int num){
+  //first is just a normal delete
+  Node temp = BST.deleteIter(root, num);
+  //update height 
+  updateHeight(temp);
+  //check balance factors just like in insert
+  //left left check
+  if(checkBal(temp) > 1 && temp.key < temp.left.key){
+    count++;
+    rightRotate(temp);
+    return temp;
+  }
+  //left right check
+  if(checkBal(temp) > 1 && temp.key > temp.left.key){
+    count++;
+    Node lRot = temp.left;
+    count++;
+    leftRotate(lRot);
+    rightRotate(temp);
+    return temp;
+  }
+  //check for right right
+  if(checkBal(temp) < -1 && temp.key > temp.right.key){
+    count++;
+    leftRotate(temp);
+    return temp;
+  }
+  //check for right left
+  if(checkBal(temp) < -1 && temp.key < temp.right.key){
+    count++;
+    Node rRot = temp.right;
+    count++;
+    rightRotate(rRot);
+    leftRotate(temp);
+    return temp;
+  }
+  //if it's still balanced just return temp
+  return temp;
+}
+//will be the same as BST findNextIter
+public int findNextIter(Node root, int num){
+  return BST.findNextIter(root, num);
+}
+//will be the same as BST findPrevIter
+public int findPrevIter(Node root, int num){
+  return BST.findPrevIter(root, num);
+}
+//will be the same as findMinIter as any BST
+public int findMinIter(Node root){
+  return BST.findMinIter(root);
+}
+//will be the same as findMaxIter as any BST
+public int findMaxIter(Node root){
+  return BST.findMaxIter(root); 
+}
+}
